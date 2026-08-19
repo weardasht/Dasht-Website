@@ -1,974 +1,1250 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DASHT — Wear Your Vibe</title>
-
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    :root {
-      --cream: #f4f0e8;
-      --warm-white: #faf9f6;
-      --beige: #e5dfd3;
-      --taupe: #aaa296;
-      --charcoal: #242321;
-      --soft-black: #151515;
-      --border: #d8d2c8;
-    }
-
-    body {
-      font-family: Arial, Helvetica, sans-serif;
-      background: var(--warm-white);
-      color: var(--charcoal);
-      letter-spacing: -0.02em;
-    }
-
-    button {
-      font: inherit;
-      cursor: pointer;
-    }
-
-    /* HEADER */
-
-    header {
-      height: 72px;
-      padding: 0 28px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-bottom: 1px solid var(--border);
-      background: rgba(250,249,246,0.95);
-      position: sticky;
-      top: 0;
-      z-index: 50;
-    }
-
-    .logo {
-      font-size: 24px;
-      font-weight: 700;
-      letter-spacing: 0.18em;
-    }
-
-    nav {
-      display: flex;
-      gap: 28px;
-      align-items: center;
-    }
-
-    nav a {
-      text-decoration: none;
-      color: var(--charcoal);
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-    }
-
-    .cart-button {
-      border: 0;
-      background: transparent;
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-    }
-
-    /* HERO */
-
-    .hero {
-      min-height: 78vh;
-      background: var(--cream);
-      display: flex;
-      align-items: flex-end;
-      padding: 40px 28px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero-image {
-      position: absolute;
-      inset: 0;
-      background:
-        linear-gradient(
-          to top,
-          rgba(20,20,18,0.38),
-          rgba(20,20,18,0.02) 65%
-        ),
-        url("https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=1800&q=85")
-        center/cover;
-    }
-
-    .hero-content {
-      position: relative;
-      z-index: 2;
-      color: white;
-      max-width: 700px;
-    }
-
-    .eyebrow {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.2em;
-      margin-bottom: 18px;
-    }
-
-    .hero h1 {
-      font-size: clamp(58px, 12vw, 150px);
-      line-height: 0.82;
-      font-weight: 500;
-      letter-spacing: -0.075em;
-      text-transform: uppercase;
-      margin-bottom: 28px;
-    }
-
-    .hero-link {
-      display: inline-block;
-      background: white;
-      color: var(--soft-black);
-      padding: 15px 23px;
-      text-decoration: none;
-      text-transform: uppercase;
-      font-size: 11px;
-      letter-spacing: 0.13em;
-    }
-
-    /* COLLECTION */
-
-    .collection {
-      padding: 90px 28px;
-    }
-
-    .section-heading {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      margin-bottom: 42px;
-    }
-
-    .section-heading h2 {
-      font-size: clamp(42px, 7vw, 82px);
-      font-weight: 400;
-      letter-spacing: -0.06em;
-    }
-
-    .section-heading span {
-      font-size: 11px;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-    }
-
-    .products {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 18px;
-    }
-
-    .product {
-      position: relative;
-    }
-
-    .product-image {
-      aspect-ratio: 0.78;
-      background: var(--beige);
-      overflow: hidden;
-    }
-
-    .product-image img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      transition: transform 0.5s ease;
-    }
-
-    .product:hover img {
-      transform: scale(1.025);
-    }
-
-    .product-info {
-      padding: 16px 2px 40px;
-    }
-
-    .product-top {
-      display: flex;
-      justify-content: space-between;
-      gap: 15px;
-    }
-
-    .product-name {
-      font-size: 14px;
-    }
-
-    .price {
-      font-size: 14px;
-    }
-
-    .product-meta {
-      margin-top: 7px;
-      font-size: 10px;
-      color: #77736c;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-    }
-
-    .product button {
-      margin-top: 16px;
-      width: 100%;
-      padding: 13px;
-      background: var(--soft-black);
-      color: white;
-      border: 1px solid var(--soft-black);
-      text-transform: uppercase;
-      font-size: 10px;
-      letter-spacing: 0.15em;
-    }
-
-    /* ABOUT */
-
-    .about {
-      background: var(--cream);
-      padding: 100px 28px;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 70px;
-    }
-
-    .about-label {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.15em;
-    }
-
-    .about-text {
-      font-size: clamp(28px, 4vw, 52px);
-      line-height: 1.03;
-      letter-spacing: -0.045em;
-      max-width: 650px;
-    }
-
-    /* FOOTER */
-
-    footer {
-      padding: 55px 28px 30px;
-      background: var(--soft-black);
-      color: white;
-    }
-
-    .footer-top {
-      display: flex;
-      justify-content: space-between;
-      gap: 30px;
-      margin-bottom: 90px;
-    }
-
-    .footer-logo {
-      font-size: 28px;
-      letter-spacing: 0.18em;
-    }
-
-    footer a {
-      color: white;
-      text-decoration: none;
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      display: block;
-      margin-bottom: 12px;
-    }
-
-    .copyright {
-      font-size: 9px;
-      opacity: 0.55;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-    }
-
-    /* CART */
-
-    .overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.35);
-      z-index: 90;
-    }
-
-    .overlay.active {
-      display: block;
-    }
-
-    .cart {
-      position: fixed;
-      right: 0;
-      top: 0;
-      height: 100%;
-      width: min(430px, 92%);
-      background: var(--warm-white);
-      z-index: 100;
-      transform: translateX(100%);
-      transition: transform 0.35s ease;
-      padding: 25px;
-      overflow-y: auto;
-    }
-
-    .cart.active {
-      transform: translateX(0);
-    }
-
-    .cart-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 20px;
-      margin-bottom: 25px;
-    }
-
-    .cart-header h3 {
-      font-size: 20px;
-      font-weight: 400;
-    }
-
-    .close {
-      background: transparent;
-      border: 0;
-      font-size: 22px;
-    }
-
-    .cart-item {
-      border-bottom: 1px solid var(--border);
-      padding: 15px 0;
-      margin-bottom: 10px;
-    }
-
-    .cart-item strong {
-      font-size: 14px;
-    }
-
-    .cart-item p {
-      font-size: 11px;
-      margin-top: 7px;
-      color: #77736c;
-    }
-
-    .cart-total {
-      display: flex;
-      justify-content: space-between;
-      margin: 25px 0;
-      font-size: 17px;
-    }
-
-    .checkout {
-      width: 100%;
-      background: var(--soft-black);
-      color: white;
-      border: 0;
-      padding: 16px;
-      text-transform: uppercase;
-      font-size: 11px;
-      letter-spacing: 0.14em;
-    }
-
-    .empty {
-      font-size: 13px;
-      color: #77736c;
-    }
-
-    /* CHECKOUT */
-
-    .checkout-panel {
-      display: none;
-      position: fixed;
-      inset: 0;
-      z-index: 120;
-      background: var(--warm-white);
-      overflow-y: auto;
-      padding: 30px 20px 60px;
-    }
-
-    .checkout-panel.active {
-      display: block;
-    }
-
-    .checkout-inner {
-      max-width: 620px;
-      margin: auto;
-    }
-
-    .checkout-title {
-      font-size: 42px;
-      font-weight: 400;
-      letter-spacing: -0.06em;
-      margin-bottom: 35px;
-    }
-
-    .checkout-form label {
-      display: block;
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.13em;
-      margin: 18px 0 8px;
-    }
-
-    .checkout-form input,
-    .checkout-form textarea {
-      width: 100%;
-      padding: 14px;
-      border: 1px solid var(--border);
-      background: white;
-      outline: none;
-      font: inherit;
-    }
-
-    .checkout-form textarea {
-      min-height: 100px;
-      resize: vertical;
-    }
-
-    .cod {
-      margin-top: 25px;
-      padding: 17px;
-      border: 1px solid var(--border);
-      background: var(--cream);
-      font-size: 12px;
-    }
-
-    .place-order {
-      width: 100%;
-      margin-top: 25px;
-      padding: 17px;
-      border: 0;
-      background: var(--soft-black);
-      color: white;
-      text-transform: uppercase;
-      letter-spacing: 0.14em;
-      font-size: 11px;
-    }
-
-    .back {
-      background: transparent;
-      border: 0;
-      margin-bottom: 25px;
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-    }
-
-    /* MOBILE */
-
-    @media (max-width: 700px) {
-
-      header {
-        padding: 0 18px;
-      }
-
-      nav {
-        display: none;
-      }
-
-      .hero {
-        min-height: 72vh;
-        padding: 25px 18px;
-      }
-
-      .collection {
-        padding: 65px 18px;
-      }
-
-      .products {
-        gap: 10px;
-      }
-
-      .product-info {
-        padding-bottom: 25px;
-      }
-
-      .product button {
-        font-size: 9px;
-      }
-
-      .about {
-        padding: 70px 18px;
-        display: block;
-      }
-
-      .about-label {
-        margin-bottom: 30px;
-      }
-
-      footer {
-        padding-left: 18px;
-        padding-right: 18px;
-      }
-
-      .footer-top {
-        margin-bottom: 60px;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DASHT — Wear Your Vibe</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+:root{
+  --black:#111111;
+  --white:#ffffff;
+  --cream:#f7f5f0;
+  --grey:#777;
+  --line:#ddddda;
+}
+
+body{
+  font-family:Arial,Helvetica,sans-serif;
+  color:var(--black);
+  background:var(--white);
+}
+
+button{
+  font-family:inherit;
+  cursor:pointer;
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+/* HEADER */
+
+.header{
+  height:68px;
+  border-bottom:1px solid var(--line);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 18px;
+  position:sticky;
+  top:0;
+  background:white;
+  z-index:50;
+}
+
+.menu-btn,
+.header-icon{
+  border:0;
+  background:none;
+  font-size:20px;
+}
+
+.logo{
+  position:absolute;
+  left:50%;
+  transform:translateX(-50%);
+  font-size:22px;
+  font-weight:bold;
+  letter-spacing:.18em;
+}
+
+.header-right{
+  display:flex;
+  align-items:center;
+  gap:16px;
+}
+
+.cart-count{
+  font-size:11px;
+  margin-left:-12px;
+  margin-top:-17px;
+}
+
+/* MENU */
+
+.menu{
+  position:fixed;
+  left:0;
+  top:0;
+  height:100vh;
+  width:min(360px,88%);
+  background:white;
+  z-index:100;
+  transform:translateX(-100%);
+  transition:.35s ease;
+  padding:25px;
+}
+
+.menu.open{
+  transform:translateX(0);
+}
+
+.menu-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:55px;
+}
+
+.menu-close{
+  border:0;
+  background:none;
+  font-size:25px;
+}
+
+.menu a{
+  display:block;
+  font-size:25px;
+  padding:14px 0;
+  border-bottom:1px solid var(--line);
+}
+
+.menu-small{
+  margin-top:45px;
+}
+
+.menu-small a{
+  font-size:13px;
+  border:0;
+  padding:8px 0;
+}
+
+.menu-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.35);
+  z-index:90;
+  display:none;
+}
+
+.menu-overlay.open{
+  display:block;
+}
+
+/* HERO */
+
+.hero{
+  min-height:78vh;
+  background:#ddd;
+  position:relative;
+  display:flex;
+  align-items:flex-end;
+  padding:25px 18px;
+  overflow:hidden;
+}
+
+.hero-photo{
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(
+      to top,
+      rgba(0,0,0,.48),
+      transparent 60%
+    ),
+    url("https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=1800&q=85")
+    center/cover;
+}
+
+.hero-content{
+  position:relative;
+  color:white;
+  z-index:2;
+}
+
+.hero-small{
+  font-size:11px;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  margin-bottom:15px;
+}
+
+.hero h1{
+  font-size:clamp(55px,14vw,120px);
+  line-height:.82;
+  font-weight:500;
+  letter-spacing:-.07em;
+  text-transform:uppercase;
+}
+
+.hero-button{
+  display:inline-block;
+  background:white;
+  padding:15px 24px;
+  margin-top:28px;
+  font-size:11px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+}
+
+/* COLLECTION */
+
+.collection{
+  padding:70px 18px;
+}
+
+.collection-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:end;
+  margin-bottom:30px;
+}
+
+.collection-head h2{
+  font-size:46px;
+  font-weight:400;
+  letter-spacing:-.06em;
+}
+
+.collection-head span{
+  font-size:10px;
+  letter-spacing:.15em;
+  text-transform:uppercase;
+}
+
+/* PRODUCTS */
+
+.products{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
+}
+
+.product-image{
+  aspect-ratio:.78;
+  background:var(--cream);
+  position:relative;
+  overflow:hidden;
+}
+
+.product-image img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.product-info{
+  padding:12px 2px 35px;
+}
+
+.product-name{
+  font-size:13px;
+  margin-bottom:5px;
+}
+
+.product-price{
+  font-size:13px;
+}
+
+.product-colors{
+  display:flex;
+  gap:6px;
+  margin-top:10px;
+}
+
+.color-dot{
+  width:16px;
+  height:16px;
+  border-radius:50%;
+  border:1px solid #bbb;
+}
+
+.black{
+  background:#111;
+}
+
+.white{
+  background:#fff;
+}
+
+.quick-add{
+  width:100%;
+  border:1px solid var(--black);
+  background:white;
+  padding:12px;
+  margin-top:12px;
+  font-size:10px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+}
+
+/* PRODUCT MODAL */
+
+.modal-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.4);
+  z-index:110;
+  display:none;
+}
+
+.modal-overlay.open{
+  display:block;
+}
+
+.product-modal{
+  position:fixed;
+  bottom:0;
+  left:0;
+  width:100%;
+  max-height:90vh;
+  background:white;
+  z-index:120;
+  transform:translateY(100%);
+  transition:.35s ease;
+  overflow:auto;
+  padding:22px;
+}
+
+.product-modal.open{
+  transform:translateY(0);
+}
+
+.modal-close{
+  border:0;
+  background:none;
+  font-size:25px;
+  float:right;
+}
+
+.modal-image{
+  width:100%;
+  aspect-ratio:1;
+  background:var(--cream);
+  margin-bottom:22px;
+}
+
+.modal-image img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.modal-name{
+  font-size:26px;
+  font-weight:400;
+  letter-spacing:-.04em;
+}
+
+.modal-price{
+  margin-top:8px;
+  font-size:15px;
+}
+
+.option-title{
+  margin-top:25px;
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:.14em;
+}
+
+.options{
+  display:flex;
+  gap:8px;
+  margin-top:10px;
+}
+
+.option{
+  background:white;
+  border:1px solid #bbb;
+  padding:12px 20px;
+  font-size:11px;
+}
+
+.option.selected{
+  border-color:black;
+  background:black;
+  color:white;
+}
+
+.add-cart{
+  width:100%;
+  margin-top:28px;
+  background:black;
+  color:white;
+  border:0;
+  padding:17px;
+  font-size:11px;
+  letter-spacing:.15em;
+  text-transform:uppercase;
+}
+
+/* ABOUT */
+
+.about{
+  background:var(--cream);
+  padding:80px 18px;
+}
+
+.about-label{
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:.15em;
+  margin-bottom:30px;
+}
+
+.about-text{
+  font-size:32px;
+  line-height:1.02;
+  letter-spacing:-.05em;
+}
+
+/* CART */
+
+.cart{
+  position:fixed;
+  right:0;
+  top:0;
+  height:100vh;
+  width:min(430px,92%);
+  background:white;
+  z-index:150;
+  transform:translateX(100%);
+  transition:.35s ease;
+  padding:25px;
+  overflow:auto;
+}
+
+.cart.open{
+  transform:translateX(0);
+}
+
+.cart-head{
+  display:flex;
+  justify-content:space-between;
+  padding-bottom:22px;
+  border-bottom:1px solid var(--line);
+}
+
+.cart-close{
+  border:0;
+  background:none;
+  font-size:24px;
+}
+
+.cart-item{
+  padding:20px 0;
+  border-bottom:1px solid var(--line);
+}
+
+.cart-item-title{
+  font-size:14px;
+}
+
+.cart-item-info{
+  font-size:11px;
+  color:var(--grey);
+  margin-top:7px;
+}
+
+.cart-total{
+  margin-top:30px;
+}
+
+.total-row{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:10px;
+  font-size:13px;
+}
+
+.total-row.final{
+  font-size:18px;
+  padding-top:15px;
+  border-top:1px solid var(--line);
+}
+
+.checkout-button{
+  width:100%;
+  background:black;
+  color:white;
+  border:0;
+  padding:17px;
+  margin-top:25px;
+  text-transform:uppercase;
+  letter-spacing:.14em;
+  font-size:11px;
+}
+
+/* FOOTER */
+
+footer{
+  background:#111;
+  color:white;
+  padding:55px 18px 30px;
+}
+
+.footer-logo{
+  font-size:25px;
+  letter-spacing:.18em;
+  margin-bottom:40px;
+}
+
+.footer-links a{
+  display:block;
+  font-size:12px;
+  margin-bottom:15px;
+}
+
+.copyright{
+  margin-top:60px;
+  font-size:9px;
+  opacity:.5;
+}
+
+/* DESKTOP */
+
+@media(min-width:800px){
+
+  .header{
+    padding:0 40px;
+  }
+
+  .products{
+    grid-template-columns:repeat(4,1fr);
+    gap:18px;
+  }
+
+  .collection{
+    padding:100px 40px;
+  }
+
+  .hero{
+    min-height:82vh;
+    padding:40px;
+  }
+
+  .about{
+    padding:120px 40px;
+  }
+
+}
+
+</style>
 </head>
 
 <body>
 
-  <!-- HEADER -->
+<!-- HEADER -->
 
-  <header>
-    <div class="logo">DASHT</div>
+<header class="header">
 
-    <nav>
-      <a href="#collection">Shop</a>
-      <a href="#about">About</a>
-      <a href="#collection">D001</a>
-    </nav>
+  <button class="menu-btn" onclick="openMenu()">☰</button>
 
-    <button class="cart-button" onclick="openCart()">
-      Cart (<span id="cart-count">0</span>)
-    </button>
-  </header>
+  <div class="logo">DASHT</div>
+
+  <div class="header-right">
+
+    <button class="header-icon">⌕</button>
+
+    <button class="header-icon" onclick="openCart()">♧</button>
+
+    <span class="cart-count" id="cartCount">0</span>
+
+  </div>
+
+</header>
 
 
-  <!-- HERO -->
+<!-- MENU -->
 
-  <section class="hero">
+<div class="menu-overlay" id="menuOverlay" onclick="closeMenu()"></div>
 
-    <div class="hero-image"></div>
+<div class="menu" id="menu">
 
-    <div class="hero-content">
+  <div class="menu-top">
 
-      <div class="eyebrow">DASHT — D001</div>
+    <strong>DASHT</strong>
 
-      <h1>Wear<br>Your<br>Vibe</h1>
+    <button class="menu-close" onclick="closeMenu()">×</button>
 
-      <a href="#collection" class="hero-link">
-        Shop D001
-      </a>
+  </div>
 
+  <a href="#collection" onclick="closeMenu()">Shop</a>
+  <a href="#collection" onclick="closeMenu()">D001</a>
+  <a href="#about" onclick="closeMenu()">About Dasht</a>
+
+  <div class="menu-small">
+
+    <a href="#">Size Guide</a>
+    <a href="#">Shipping & Returns</a>
+    <a href="#">Contact</a>
+    <a href="#">Instagram</a>
+
+  </div>
+
+</div>
+
+
+<!-- HERO -->
+
+<section class="hero">
+
+  <div class="hero-photo"></div>
+
+  <div class="hero-content">
+
+    <div class="hero-small">
+      DASHT — D001
     </div>
 
-  </section>
+    <h1>
+      Wear<br>
+      Your<br>
+      Vibe
+    </h1>
+
+    <a class="hero-button" href="#collection">
+      Shop D001
+    </a>
+
+  </div>
+
+</section>
 
 
-  <!-- COLLECTION -->
+<!-- COLLECTION -->
 
-  <section class="collection" id="collection">
+<section class="collection" id="collection">
 
-    <div class="section-heading">
-      <h2>D001</h2>
-      <span>Collection 01</span>
-    </div>
+  <div class="collection-head">
 
+    <h2>D001</h2>
 
-    <div class="products">
+    <span>4 Articles</span>
 
-      <!-- PRODUCT 1 -->
-
-      <article class="product">
-
-        <div class="product-image">
-          <img
-            src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=1000&q=85"
-            alt="Dasht D001 T-shirt"
-          >
-        </div>
-
-        <div class="product-info">
-
-          <div class="product-top">
-            <div class="product-name">D001 — T-Shirt</div>
-            <div class="price">Rs. 2,499</div>
-          </div>
-
-          <div class="product-meta">
-            Cotton / Unisex
-          </div>
-
-          <button onclick="addProduct('D001 T-Shirt', 2499)">
-            Add to Cart
-          </button>
-
-        </div>
-
-      </article>
+  </div>
 
 
-      <!-- PRODUCT 2 -->
-
-      <article class="product">
-
-        <div class="product-image">
-          <img
-            src="https://images.unsplash.com/photo-1503341504253-dff4815485f1?auto=format&fit=crop&w=1000&q=85"
-            alt="Dasht D001 T-shirt"
-          >
-        </div>
-
-        <div class="product-info">
-
-          <div class="product-top">
-            <div class="product-name">D001 — Graphic Tee</div>
-            <div class="price">Rs. 2,499</div>
-          </div>
-
-          <div class="product-meta">
-            Cotton / Unisex
-          </div>
-
-          <button onclick="addProduct('D001 Graphic Tee', 2499)">
-            Add to Cart
-          </button>
-
-        </div>
-
-      </article>
-
-    </div>
-
-  </section>
+  <div class="products">
 
 
-  <!-- ABOUT -->
+    <!-- PRODUCT 1 -->
 
-  <section class="about" id="about">
+    <article class="product">
 
-    <div class="about-label">
-      About Dasht
-    </div>
+      <div class="product-image">
 
-    <div class="about-text">
-      Clothes for the people who
-      carry their own world with them.
-      <br><br>
-      Wear your vibe.
-    </div>
-
-  </section>
-
-
-  <!-- FOOTER -->
-
-  <footer>
-
-    <div class="footer-top">
-
-      <div class="footer-logo">
-        DASHT
-      </div>
-
-      <div>
-        <a href="#collection">Shop</a>
-        <a href="#about">About</a>
-        <a href="https://instagram.com/" target="_blank">
-          Instagram
-        </a>
-      </div>
-
-    </div>
-
-    <div class="copyright">
-      © 2026 DASHT. All rights reserved.
-    </div>
-
-  </footer>
-
-
-  <!-- CART -->
-
-  <div class="overlay" id="overlay" onclick="closeCart()"></div>
-
-  <aside class="cart" id="cart">
-
-    <div class="cart-header">
-
-      <h3>Your Cart</h3>
-
-      <button class="close" onclick="closeCart()">
-        ×
-      </button>
-
-    </div>
-
-    <div id="cart-items">
-      <div class="empty">
-        Your cart is empty.
-      </div>
-    </div>
-
-    <div class="cart-total">
-      <span>Total</span>
-      <strong>Rs. <span id="cart-total">0</span></strong>
-    </div>
-
-    <button class="checkout" onclick="openCheckout()">
-      Checkout — Cash on Delivery
-    </button>
-
-  </aside>
-
-
-  <!-- CHECKOUT -->
-
-  <section class="checkout-panel" id="checkout">
-
-    <div class="checkout-inner">
-
-      <button class="back" onclick="closeCheckout()">
-        ← Back to cart
-      </button>
-
-      <h2 class="checkout-title">
-        Checkout
-      </h2>
-
-      <form class="checkout-form" onsubmit="placeOrder(event)">
-
-        <label>Full Name</label>
-        <input
-          id="customer-name"
-          type="text"
-          required
-          placeholder="Your full name"
+        <img
+          src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=900&q=85"
+          alt="D001"
         >
 
-        <label>Phone Number</label>
-        <input
-          id="customer-phone"
-          type="tel"
-          required
-          placeholder="03XX XXXXXXX"
-        >
+      </div>
 
-        <label>City</label>
-        <input
-          id="customer-city"
-          type="text"
-          required
-          placeholder="Your city"
-        >
+      <div class="product-info">
 
-        <label>Complete Address</label>
-        <textarea
-          id="customer-address"
-          required
-          placeholder="House number, street, area..."
-        ></textarea>
-
-        <div class="cod">
-          <strong>Cash on Delivery</strong>
-          <br><br>
-          Pay when your Dasht order arrives at your doorstep.
+        <div class="product-name">
+          D001 — 01
         </div>
 
-        <button class="place-order" type="submit">
-          Place COD Order
+        <div class="product-price">
+          Rs. 1,699
+        </div>
+
+        <div class="product-colors">
+
+          <span class="color-dot black"></span>
+          <span class="color-dot white"></span>
+
+        </div>
+
+        <button
+          class="quick-add"
+          onclick="openProduct('D001 — 01')"
+        >
+          Quick Add
         </button>
 
-      </form>
+      </div>
+
+    </article>
+
+
+    <!-- PRODUCT 2 -->
+
+    <article class="product">
+
+      <div class="product-image">
+
+        <img
+          src="https://images.unsplash.com/photo-1583743814966-8936f37f4678?auto=format&fit=crop&w=900&q=85"
+          alt="D001"
+        >
+
+      </div>
+
+      <div class="product-info">
+
+        <div class="product-name">
+          D001 — 02
+        </div>
+
+        <div class="product-price">
+          Rs. 1,699
+        </div>
+
+        <div class="product-colors">
+
+          <span class="color-dot black"></span>
+          <span class="color-dot white"></span>
+
+        </div>
+
+        <button
+          class="quick-add"
+          onclick="openProduct('D001 — 02')"
+        >
+          Quick Add
+        </button>
+
+      </div>
+
+    </article>
+
+
+    <!-- PRODUCT 3 -->
+
+    <article class="product">
+
+      <div class="product-image">
+
+        <img
+          src="https://images.unsplash.com/photo-1503341504253-dff4815485f1?auto=format&fit=crop&w=900&q=85"
+          alt="D001"
+        >
+
+      </div>
+
+      <div class="product-info">
+
+        <div class="product-name">
+          D001 — 03
+        </div>
+
+        <div class="product-price">
+          Rs. 1,699
+        </div>
+
+        <div class="product-colors">
+
+          <span class="color-dot black"></span>
+          <span class="color-dot white"></span>
+
+        </div>
+
+        <button
+          class="quick-add"
+          onclick="openProduct('D001 — 03')"
+        >
+          Quick Add
+        </button>
+
+      </div>
+
+    </article>
+
+
+    <!-- PRODUCT 4 -->
+
+    <article class="product">
+
+      <div class="product-image">
+
+        <img
+          src="https://images.unsplash.com/photo-1618354691373-d851c5c3a990?auto=format&fit=crop&w=900&q=85"
+          alt="D001"
+        >
+
+      </div>
+
+      <div class="product-info">
+
+        <div class="product-name">
+          D001 — 04
+        </div>
+
+        <div class="product-price">
+          Rs. 1,699
+        </div>
+
+        <div class="product-colors">
+
+          <span class="color-dot black"></span>
+          <span class="color-dot white"></span>
+
+        </div>
+
+        <button
+          class="quick-add"
+          onclick="openProduct('D001 — 04')"
+        >
+          Quick Add
+        </button>
+
+      </div>
+
+    </article>
+
+  </div>
+
+</section>
+
+
+<!-- ABOUT -->
+
+<section class="about" id="about">
+
+  <div class="about-label">
+    DASHT
+  </div>
+
+  <div class="about-text">
+
+    Wear what feels like you.
+    <br><br>
+    Wear your vibe.
+
+  </div>
+
+</section>
+
+
+<!-- FOOTER -->
+
+<footer>
+
+  <div class="footer-logo">
+    DASHT
+  </div>
+
+  <div class="footer-links">
+
+    <a href="#collection">Shop</a>
+    <a href="#about">About</a>
+    <a href="#">Size Guide</a>
+    <a href="#">Shipping & Returns</a>
+    <a href="#">Instagram</a>
+
+  </div>
+
+  <div class="copyright">
+    © 2026 DASHT
+  </div>
+
+</footer>
+
+
+<!-- PRODUCT MODAL -->
+
+<div class="modal-overlay" id="modalOverlay"></div>
+
+<div class="product-modal" id="productModal">
+
+  <button class="modal-close" onclick="closeProduct()">×</button>
+
+  <div class="modal-image">
+
+    <img
+      id="modalImage"
+      src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=900&q=85"
+      alt="D001"
+    >
+
+  </div>
+
+  <div class="modal-name" id="modalName">
+    D001
+  </div>
+
+  <div class="modal-price">
+    Rs. 1,699
+  </div>
+
+
+  <div class="option-title">
+    Color
+  </div>
+
+  <div class="options">
+
+    <button
+      class="option selected"
+      onclick="selectOption(this)"
+    >
+      Black
+    </button>
+
+    <button
+      class="option"
+      onclick="selectOption(this)"
+    >
+      White
+    </button>
+
+  </div>
+
+
+  <div class="option-title">
+    Size
+  </div>
+
+  <div class="options">
+
+    <button
+      class="option"
+      onclick="selectOption(this)"
+    >
+      S
+    </button>
+
+    <button
+      class="option selected"
+      onclick="selectOption(this)"
+    >
+      M
+    </button>
+
+    <button
+      class="option"
+      onclick="selectOption(this)"
+    >
+      L
+    </button>
+
+  </div>
+
+
+  <button
+    class="add-cart"
+    onclick="addToCart()"
+  >
+    Add to Bag
+  </button>
+
+</div>
+
+
+<!-- CART -->
+
+<div class="cart" id="cart">
+
+  <div class="cart-head">
+
+    <strong>Your Bag</strong>
+
+    <button
+      class="cart-close"
+      onclick="closeCart()"
+    >
+      ×
+    </button>
+
+  </div>
+
+  <div id="cartItems"></div>
+
+
+  <div class="cart-total">
+
+    <div class="total-row">
+
+      <span>Subtotal</span>
+
+      <span>
+        Rs. <span id="subtotal">0</span>
+      </span>
 
     </div>
 
-  </section>
 
+    <div class="total-row">
 
-  <script>
+      <span>Shipping</span>
 
-    let cart = [];
+      <span>Rs. 250</span>
 
-    function addProduct(name, price) {
+    </div>
 
-      cart.push({
-        name: name,
-        price: price
-      });
 
-      updateCart();
+    <div class="total-row final">
 
-      openCart();
-    }
+      <strong>Total</strong>
 
+      <strong>
+        Rs. <span id="total">250</span>
+      </strong>
 
-    function updateCart() {
+    </div>
 
-      const items = document.getElementById("cart-items");
 
-      const count = document.getElementById("cart-count");
+    <button class="checkout-button">
+      Checkout
+    </button>
 
-      const totalElement = document.getElementById("cart-total");
+  </div>
 
-      count.innerText = cart.length;
+</div>
 
 
-      if (cart.length === 0) {
+<script>
 
-        items.innerHTML =
-          '<div class="empty">Your cart is empty.</div>';
+let cart = [];
 
-        totalElement.innerText = "0";
+let currentProduct = "";
 
-        return;
-      }
 
+function openMenu(){
 
-      let total = 0;
+  document
+    .getElementById("menu")
+    .classList.add("open");
 
-      items.innerHTML = "";
+  document
+    .getElementById("menuOverlay")
+    .classList.add("open");
 
-      cart.forEach((item, index) => {
+}
 
-        total += item.price;
 
-        const div = document.createElement("div");
+function closeMenu(){
 
-        div.className = "cart-item";
+  document
+    .getElementById("menu")
+    .classList.remove("open");
 
-        div.innerHTML = `
-          <strong>${item.name}</strong>
-          <p>Rs. ${item.price.toLocaleString()}</p>
-          <button
-            onclick="removeProduct(${index})"
-            style="
-              margin-top:10px;
-              border:0;
-              background:none;
-              text-decoration:underline;
-              font-size:10px;
-            "
-          >
-            Remove
-          </button>
-        `;
+  document
+    .getElementById("menuOverlay")
+    .classList.remove("open");
 
-        items.appendChild(div);
+}
 
-      });
 
-      totalElement.innerText = total.toLocaleString();
+function openProduct(name){
 
-    }
+  currentProduct = name;
 
+  document
+    .getElementById("modalName")
+    .innerText = name;
 
-    function removeProduct(index) {
+  document
+    .getElementById("productModal")
+    .classList.add("open");
 
-      cart.splice(index, 1);
+  document
+    .getElementById("modalOverlay")
+    .classList.add("open");
 
-      updateCart();
+}
 
-    }
 
+function closeProduct(){
 
-    function openCart() {
+  document
+    .getElementById("productModal")
+    .classList.remove("open");
 
-      document.getElementById("cart")
-        .classList.add("active");
+  document
+    .getElementById("modalOverlay")
+    .classList.remove("open");
 
-      document.getElementById("overlay")
-        .classList.add("active");
+}
 
-    }
 
+function selectOption(button){
 
-    function closeCart() {
+  const parent = button.parentElement;
 
-      document.getElementById("cart")
-        .classList.remove("active");
+  parent
+    .querySelectorAll(".option")
+    .forEach(option => {
 
-      document.getElementById("overlay")
-        .classList.remove("active");
+      option.classList.remove("selected");
 
-    }
+    });
 
+  button.classList.add("selected");
 
-    function openCheckout() {
+}
 
-      if (cart.length === 0) {
 
-        alert("Your cart is empty.");
+function addToCart(){
 
-        return;
+  const selected =
+    document.querySelectorAll(
+      "#productModal .option.selected"
+    );
 
-      }
+  const color = selected[0].innerText;
 
-      closeCart();
+  const size = selected[1].innerText;
 
-      document.getElementById("checkout")
-        .classList.add("active");
+  cart.push({
 
-    }
+    product:currentProduct,
 
+    color:color,
 
-    function closeCheckout() {
+    size:size,
 
-      document.getElementById("checkout")
-        .classList.remove("active");
+    price:1699
 
-    }
+  });
 
+  updateCart();
 
-    function placeOrder(event) {
+  closeProduct();
 
-      event.preventDefault();
+  openCart();
 
+}
 
-      const name =
-        document.getElementById("customer-name").value;
 
-      const phone =
-        document.getElementById("customer-phone").value;
+function updateCart(){
 
-      const city =
-        document.getElementById("customer-city").value;
+  const container =
+    document.getElementById("cartItems");
 
-      const address =
-        document.getElementById("customer-address").value;
+  const count =
+    document.getElementById("cartCount");
 
+  count.innerText = cart.length;
 
-      let total = 0;
 
-      let products = "";
+  if(cart.length === 0){
 
-      cart.forEach(item => {
+    container.innerHTML =
+      "<p style='margin-top:25px;color:#777;font-size:13px'>Your bag is empty.</p>";
 
-        total += item.price;
+    document.getElementById("subtotal")
+      .innerText = "0";
 
-        products +=
-          `${item.name} — Rs. ${item.price.toLocaleString()}%0A`;
+    document.getElementById("total")
+      .innerText = "250";
 
-      });
+    return;
 
+  }
 
-      const message =
-        `*NEW DASHT COD ORDER*%0A%0A` +
-        `*Customer:* ${encodeURIComponent(name)}%0A` +
-        `*Phone:* ${encodeURIComponent(phone)}%0A` +
-        `*City:* ${encodeURIComponent(city)}%0A` +
-        `*Address:* ${encodeURIComponent(address)}%0A%0A` +
-        `*Order:*%0A${products}%0A` +
-        `*Total:* Rs. ${total.toLocaleString()}%0A%0A` +
-        `Payment: Cash on Delivery`;
 
+  let subtotal = 0;
 
-      /*
-        IMPORTANT:
-        Replace 923XXXXXXXXX with YOUR
-        WhatsApp business number.
+  container.innerHTML = "";
 
-        Example:
-        923001234567
-      */
 
-      const whatsappNumber = "923XXXXXXXXX";
+  cart.forEach((item,index)=>{
 
-      window.open(
-        `https://wa.me/${whatsappNumber}?text=${message}`,
-        "_blank"
-      );
+    subtotal += item.price;
 
-    }
 
-  </script>
+    const div =
+      document.createElement("div");
+
+    div.className = "cart-item";
+
+
+    div.innerHTML = `
+
+      <div class="cart-item-title">
+        ${item.product}
+      </div>
+
+      <div class="cart-item-info">
+        ${item.color} / ${item.size}
+        <br>
+        Rs. ${item.price.toLocaleString()}
+      </div>
+
+      <button
+        onclick="removeItem(${index})"
+        style="
+          border:0;
+          background:none;
+          margin-top:10px;
+          text-decoration:underline;
+          font-size:10px;
+        "
+      >
+        Remove
+      </button>
+
+    `;
+
+
+    container.appendChild(div);
+
+  });
+
+
+  document.getElementById("subtotal")
+    .innerText =
+    subtotal.toLocaleString();
+
+
+  document.getElementById("total")
+    .innerText =
+    (subtotal + 250).toLocaleString();
+
+}
+
+
+function removeItem(index){
+
+  cart.splice(index,1);
+
+  updateCart();
+
+}
+
+
+function openCart(){
+
+  updateCart();
+
+  document
+    .getElementById("cart")
+    .classList.add("open");
+
+}
+
+
+function closeCart(){
+
+  document
+    .getElementById("cart")
+    .classList.remove("open");
+
+}
+
+
+document
+  .getElementById("modalOverlay")
+  .addEventListener(
+    "click",
+    closeProduct
+  );
+
+</script>
 
 </body>
 </html>
