@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DASHT — Wear Your Vibe</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --cream: #f4f0e8;
+      --warm-white: #faf9f6;
+      --beige: #e5dfd3;
+      --taupe: #aaa296;
+      --charcoal: #242321;
+      --soft-black: #151515;
+      --border: #d8d2c8;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--warm-white);
+      color: var(--charcoal);
+      letter-spacing: -0.02em;
+    }
+
+    button {
+      font: inherit;
+      cursor: pointer;
+    }
+
+    /* HEADER */
+
+    header {
+      height: 72px;
+      padding: 0 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      background: rgba(250,249,246,0.95);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+    }
+
+    nav {
+      display: flex;
+      gap: 28px;
+      align-items: center;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: var(--charcoal);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    .cart-button {
+      border: 0;
+      background: transparent;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    /* HERO */
+
+    .hero {
+      min-height: 78vh;
+      background: var(--cream);
+      display: flex;
+      align-items: flex-end;
+      padding: 40px 28px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-image {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(
+          to top,
+          rgba(20,20,18,0.38),
+          rgba(20,20,18,0.02) 65%
+        ),
+        url("https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=1800&q=85")
+        center/cover;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      color: white;
+      max-width: 700px;
+    }
+
+    .eyebrow {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      margin-bottom: 18px;
+    }
+
+    .hero h1 {
+      font-size: clamp(58px, 12vw, 150px);
+      line-height: 0.82;
+      font-weight: 500;
+      letter-spacing: -0.075em;
+      text-transform: uppercase;
+      margin-bottom: 28px;
+    }
+
+    .hero-link {
+      display: inline-block;
+      background: white;
+      color: var(--soft-black);
+      padding: 15px 23px;
+      text-decoration: none;
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 0.13em;
+    }
+
+    /* COLLECTION */
+
+    .collection {
+      padding: 90px 28px;
+    }
+
+    .section-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 42px;
+    }
+
+    .section-heading h2 {
+      font-size: clamp(42px, 7vw, 82px);
+      font-weight: 400;
+      letter-spacing: -0.06em;
+    }
+
+    .section-heading span {
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    .products {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+    }
+
+    .product {
+      position: relative;
+    }
+
+    .product-image {
+      aspect-ratio: 0.78;
+      background: var(--beige);
+      overflow: hidden;
+    }
+
+    .product-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.5s ease;
+    }
+
+    .product:hover img {
+      transform: scale(1.025);
+    }
+
+    .product-info {
+      padding: 16px 2px 40px;
+    }
+
+    .product-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+    }
+
+    .product-name {
+      font-size: 14px;
+    }
+
+    .price {
+      font-size: 14px;
+    }
+
+    .product-meta {
+      margin-top: 7px;
+      font-size: 10px;
+      color: #77736c;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    .product button {
+      margin-top: 16px;
+      width: 100%;
+      padding: 13px;
+      background: var(--soft-black);
+      color: white;
+      border: 1px solid var(--soft-black);
+      text-transform: uppercase;
+      font-size: 10px;
+      letter-spacing: 0.15em;
+    }
+
+    /* ABOUT */
+
+    .about {
+      background: var(--cream);
+      padding: 100px 28px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 70px;
+    }
+
+    .about-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+    }
+
+    .about-text {
+      font-size: clamp(28px, 4vw, 52px);
+      line-height: 1.03;
+      letter-spacing: -0.045em;
+      max-width: 650px;
+    }
+
+    /* FOOTER */
+
+    footer {
+      padding: 55px 28px 30px;
+      background: var(--soft-black);
+      color: white;
+    }
+
+    .footer-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 30px;
+      margin-bottom: 90px;
+    }
+
+    .footer-logo {
+      font-size: 28px;
+      letter-spacing: 0.18em;
+    }
+
+    footer a {
+      color: white;
+      text-decoration: none;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      display: block;
+      margin-bottom: 12px;
+    }
+
+    .copyright {
+      font-size: 9px;
+      opacity: 0.55;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    /* CART */
+
+    .overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.35);
+      z-index: 90;
+    }
+
+    .overlay.active {
+      display: block;
+    }
+
+    .cart {
+      position: fixed;
+      right: 0;
+      top: 0;
+      height: 100%;
+      width: min(430px, 92%);
+      background: var(--warm-white);
+      z-index: 100;
+      transform: translateX(100%);
+      transition: transform 0.35s ease;
+      padding: 25px;
+      overflow-y: auto;
+    }
+
+    .cart.active {
+      transform: translateX(0);
+    }
+
+    .cart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 20px;
+      margin-bottom: 25px;
+    }
+
+    .cart-header h3 {
+      font-size: 20px;
+      font-weight: 400;
+    }
+
+    .close {
+      background: transparent;
+      border: 0;
+      font-size: 22px;
+    }
+
+    .cart-item {
+      border-bottom: 1px solid var(--border);
+      padding: 15px 0;
+      margin-bottom: 10px;
+    }
+
+    .cart-item strong {
+      font-size: 14px;
+    }
+
+    .cart-item p {
+      font-size: 11px;
+      margin-top: 7px;
+      color: #77736c;
+    }
+
+    .cart-total {
+      display: flex;
+      justify-content: space-between;
+      margin: 25px 0;
+      font-size: 17px;
+    }
+
+    .checkout {
+      width: 100%;
+      background: var(--soft-black);
+      color: white;
+      border: 0;
+      padding: 16px;
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 0.14em;
+    }
+
+    .empty {
+      font-size: 13px;
+      color: #77736c;
+    }
+
+    /* CHECKOUT */
+
+    .checkout-panel {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 120;
+      background: var(--warm-white);
+      overflow-y: auto;
+      padding: 30px 20px 60px;
+    }
+
+    .checkout-panel.active {
+      display: block;
+    }
+
+    .checkout-inner {
+      max-width: 620px;
+      margin: auto;
+    }
+
+    .checkout-title {
+      font-size: 42px;
+      font-weight: 400;
+      letter-spacing: -0.06em;
+      margin-bottom: 35px;
+    }
+
+    .checkout-form label {
+      display: block;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.13em;
+      margin: 18px 0 8px;
+    }
+
+    .checkout-form input,
+    .checkout-form textarea {
+      width: 100%;
+      padding: 14px;
+      border: 1px solid var(--border);
+      background: white;
+      outline: none;
+      font: inherit;
+    }
+
+    .checkout-form textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .cod {
+      margin-top: 25px;
+      padding: 17px;
+      border: 1px solid var(--border);
+      background: var(--cream);
+      font-size: 12px;
+    }
+
+    .place-order {
+      width: 100%;
+      margin-top: 25px;
+      padding: 17px;
+      border: 0;
+      background: var(--soft-black);
+      color: white;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      font-size: 11px;
+    }
+
+    .back {
+      background: transparent;
+      border: 0;
+      margin-bottom: 25px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    /* MOBILE */
+
+    @media (max-width: 700px) {
+
+      header {
+        padding: 0 18px;
+      }
+
+      nav {
+        display: none;
+      }
+
+      .hero {
+        min-height: 72vh;
+        padding: 25px 18px;
+      }
+
+      .collection {
+        padding: 65px 18px;
+      }
+
+      .products {
+        gap: 10px;
+      }
+
+      .product-info {
+        padding-bottom: 25px;
+      }
+
+      .product button {
+        font-size: 9px;
+      }
+
+      .about {
+        padding: 70px 18px;
+        display: block;
+      }
+
+      .about-label {
+        margin-bottom: 30px;
+      }
+
+      footer {
+        padding-left: 18px;
+        padding-right: 18px;
+      }
+
+      .footer-top {
+        margin-bottom: 60px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- HEADER -->
+
+  <header>
+    <div class="logo">DASHT</div>
+
+    <nav>
+      <a href="#collection">Shop</a>
+      <a href="#about">About</a>
+      <a href="#collection">D001</a>
+    </nav>
+
+    <button class="cart-button" onclick="openCart()">
+      Cart (<span id="cart-count">0</span>)
+    </button>
+  </header>
+
+
+  <!-- HERO -->
+
+  <section class="hero">
+
+    <div class="hero-image"></div>
+
+    <div class="hero-content">
+
+      <div class="eyebrow">DASHT — D001</div>
+
+      <h1>Wear<br>Your<br>Vibe</h1>
+
+      <a href="#collection" class="hero-link">
+        Shop D001
+      </a>
+
+    </div>
+
+  </section>
+
+
+  <!-- COLLECTION -->
+
+  <section class="collection" id="collection">
+
+    <div class="section-heading">
+      <h2>D001</h2>
+      <span>Collection 01</span>
+    </div>
+
+
+    <div class="products">
+
+      <!-- PRODUCT 1 -->
+
+      <article class="product">
+
+        <div class="product-image">
+          <img
+            src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=1000&q=85"
+            alt="Dasht D001 T-shirt"
+          >
+        </div>
+
+        <div class="product-info">
+
+          <div class="product-top">
+            <div class="product-name">D001 — T-Shirt</div>
+            <div class="price">Rs. 2,499</div>
+          </div>
+
+          <div class="product-meta">
+            Cotton / Unisex
+          </div>
+
+          <button onclick="addProduct('D001 T-Shirt', 2499)">
+            Add to Cart
+          </button>
+
+        </div>
+
+      </article>
+
+
+      <!-- PRODUCT 2 -->
+
+      <article class="product">
+
+        <div class="product-image">
+          <img
+            src="https://images.unsplash.com/photo-1503341504253-dff4815485f1?auto=format&fit=crop&w=1000&q=85"
+            alt="Dasht D001 T-shirt"
+          >
+        </div>
+
+        <div class="product-info">
+
+          <div class="product-top">
+            <div class="product-name">D001 — Graphic Tee</div>
+            <div class="price">Rs. 2,499</div>
+          </div>
+
+          <div class="product-meta">
+            Cotton / Unisex
+          </div>
+
+          <button onclick="addProduct('D001 Graphic Tee', 2499)">
+            Add to Cart
+          </button>
+
+        </div>
+
+      </article>
+
+    </div>
+
+  </section>
+
+
+  <!-- ABOUT -->
+
+  <section class="about" id="about">
+
+    <div class="about-label">
+      About Dasht
+    </div>
+
+    <div class="about-text">
+      Clothes for the people who
+      carry their own world with them.
+      <br><br>
+      Wear your vibe.
+    </div>
+
+  </section>
+
+
+  <!-- FOOTER -->
+
+  <footer>
+
+    <div class="footer-top">
+
+      <div class="footer-logo">
+        DASHT
+      </div>
+
+      <div>
+        <a href="#collection">Shop</a>
+        <a href="#about">About</a>
+        <a href="https://instagram.com/" target="_blank">
+          Instagram
+        </a>
+      </div>
+
+    </div>
+
+    <div class="copyright">
+      © 2026 DASHT. All rights reserved.
+    </div>
+
+  </footer>
+
+
+  <!-- CART -->
+
+  <div class="overlay" id="overlay" onclick="closeCart()"></div>
+
+  <aside class="cart" id="cart">
+
+    <div class="cart-header">
+
+      <h3>Your Cart</h3>
+
+      <button class="close" onclick="closeCart()">
+        ×
+      </button>
+
+    </div>
+
+    <div id="cart-items">
+      <div class="empty">
+        Your cart is empty.
+      </div>
+    </div>
+
+    <div class="cart-total">
+      <span>Total</span>
+      <strong>Rs. <span id="cart-total">0</span></strong>
+    </div>
+
+    <button class="checkout" onclick="openCheckout()">
+      Checkout — Cash on Delivery
+    </button>
+
+  </aside>
+
+
+  <!-- CHECKOUT -->
+
+  <section class="checkout-panel" id="checkout">
+
+    <div class="checkout-inner">
+
+      <button class="back" onclick="closeCheckout()">
+        ← Back to cart
+      </button>
+
+      <h2 class="checkout-title">
+        Checkout
+      </h2>
+
+      <form class="checkout-form" onsubmit="placeOrder(event)">
+
+        <label>Full Name</label>
+        <input
+          id="customer-name"
+          type="text"
+          required
+          placeholder="Your full name"
+        >
+
+        <label>Phone Number</label>
+        <input
+          id="customer-phone"
+          type="tel"
+          required
+          placeholder="03XX XXXXXXX"
+        >
+
+        <label>City</label>
+        <input
+          id="customer-city"
+          type="text"
+          required
+          placeholder="Your city"
+        >
+
+        <label>Complete Address</label>
+        <textarea
+          id="customer-address"
+          required
+          placeholder="House number, street, area..."
+        ></textarea>
+
+        <div class="cod">
+          <strong>Cash on Delivery</strong>
+          <br><br>
+          Pay when your Dasht order arrives at your doorstep.
+        </div>
+
+        <button class="place-order" type="submit">
+          Place COD Order
+        </button>
+
+      </form>
+
+    </div>
+
+  </section>
+
+
+  <script>
+
+    let cart = [];
+
+    function addProduct(name, price) {
+
+      cart.push({
+        name: name,
+        price: price
+      });
+
+      updateCart();
+
+      openCart();
+    }
+
+
+    function updateCart() {
+
+      const items = document.getElementById("cart-items");
+
+      const count = document.getElementById("cart-count");
+
+      const totalElement = document.getElementById("cart-total");
+
+      count.innerText = cart.length;
+
+
+      if (cart.length === 0) {
+
+        items.innerHTML =
+          '<div class="empty">Your cart is empty.</div>';
+
+        totalElement.innerText = "0";
+
+        return;
+      }
+
+
+      let total = 0;
+
+      items.innerHTML = "";
+
+      cart.forEach((item, index) => {
+
+        total += item.price;
+
+        const div = document.createElement("div");
+
+        div.className = "cart-item";
+
+        div.innerHTML = `
+          <strong>${item.name}</strong>
+          <p>Rs. ${item.price.toLocaleString()}</p>
+          <button
+            onclick="removeProduct(${index})"
+            style="
+              margin-top:10px;
+              border:0;
+              background:none;
+              text-decoration:underline;
+              font-size:10px;
+            "
+          >
+            Remove
+          </button>
+        `;
+
+        items.appendChild(div);
+
+      });
+
+      totalElement.innerText = total.toLocaleString();
+
+    }
+
+
+    function removeProduct(index) {
+
+      cart.splice(index, 1);
+
+      updateCart();
+
+    }
+
+
+    function openCart() {
+
+      document.getElementById("cart")
+        .classList.add("active");
+
+      document.getElementById("overlay")
+        .classList.add("active");
+
+    }
+
+
+    function closeCart() {
+
+      document.getElementById("cart")
+        .classList.remove("active");
+
+      document.getElementById("overlay")
+        .classList.remove("active");
+
+    }
+
+
+    function openCheckout() {
+
+      if (cart.length === 0) {
+
+        alert("Your cart is empty.");
+
+        return;
+
+      }
+
+      closeCart();
+
+      document.getElementById("checkout")
+        .classList.add("active");
+
+    }
+
+
+    function closeCheckout() {
+
+      document.getElementById("checkout")
+        .classList.remove("active");
+
+    }
+
+
+    function placeOrder(event) {
+
+      event.preventDefault();
+
+
+      const name =
+        document.getElementById("customer-name").value;
+
+      const phone =
+        document.getElementById("customer-phone").value;
+
+      const city =
+        document.getElementById("customer-city").value;
+
+      const address =
+        document.getElementById("customer-address").value;
+
+
+      let total = 0;
+
+      let products = "";
+
+      cart.forEach(item => {
+
+        total += item.price;
+
+        products +=
+          `${item.name} — Rs. ${item.price.toLocaleString()}%0A`;
+
+      });
+
+
+      const message =
+        `*NEW DASHT COD ORDER*%0A%0A` +
+        `*Customer:* ${encodeURIComponent(name)}%0A` +
+        `*Phone:* ${encodeURIComponent(phone)}%0A` +
+        `*City:* ${encodeURIComponent(city)}%0A` +
+        `*Address:* ${encodeURIComponent(address)}%0A%0A` +
+        `*Order:*%0A${products}%0A` +
+        `*Total:* Rs. ${total.toLocaleString()}%0A%0A` +
+        `Payment: Cash on Delivery`;
+
+
+      /*
+        IMPORTANT:
+        Replace 923XXXXXXXXX with YOUR
+        WhatsApp business number.
+
+        Example:
+        923001234567
+      */
+
+      const whatsappNumber = "923XXXXXXXXX";
+
+      window.open(
+        `https://wa.me/${whatsappNumber}?text=${message}`,
+        "_blank"
+      );
+
+    }
+
+  </script>
+
+</body>
+</html>
