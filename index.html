@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>دشت — Dasht | Minimal Urdu Tees</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;700&family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#16150F; --paper:#EDE7D8; --paper-dim:#E2DBC8;
+    --indigo:#2C3A63; --rust:#9C4A2E; --line: rgba(22,21,15,0.16);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{ background:var(--paper); color:var(--ink); font-family:'Space Grotesk', sans-serif; -webkit-font-smoothing:antialiased; }
+  .urdu{ font-family:'Noto Nastaliq Urdu', serif; direction:rtl; }
+  .mono{ font-family:'JetBrains Mono', monospace; }
+  a{ color:inherit; text-decoration:none; }
+  button{ font-family:inherit; cursor:pointer; border:none; background:none; }
+  input, textarea{ font-family:inherit; }
+  section{ scroll-margin-top:110px; }
+  svg.icon{ width:20px; height:20px; stroke:var(--ink); fill:none; stroke-width:1.6; }
+
+  /* ---------- ANNOUNCEMENT BAR ---------- */
+  .announce{
+    background:var(--ink); color:var(--paper); text-align:center;
+    font-size:11.5px; letter-spacing:.05em; padding:9px 12px;
+  }
+
+  /* ---------- HEADER ---------- */
+  header{
+    position:sticky; top:0; z-index:40;
+    background:var(--paper); border-bottom:1px solid var(--line);
+    display:grid; grid-template-columns:1fr auto 1fr;
+    align-items:center; padding:14px 20px;
+  }
+  .head-left{ display:flex; align-items:center; gap:16px; }
+  .head-right{ display:flex; align-items:center; gap:16px; justify-content:flex-end; }
+  .icon-btn{ display:flex; align-items:center; justify-content:center; position:relative; }
+  .brand{ display:flex; justify-content:center; }
+  .brand img{ height:42px; width:auto; display:block; }
+  .brand-fallback{ display:flex; align-items:baseline; gap:8px; }
+  .brand-fallback .urdu{ font-size:24px; font-weight:700; }
+  .brand-fallback .latin{ font-size:10px; letter-spacing:.18em; text-transform:uppercase; opacity:.6; }
+  .cart-count{
+    position:absolute; top:-7px; right:-9px; background:var(--indigo); color:var(--paper);
+    font-size:9.5px; font-family:'JetBrains Mono', monospace; width:16px; height:16px;
+    border-radius:50%; display:flex; align-items:center; justify-content:center;
+  }
+
+  /* search bar */
+  .search-bar{
+    max-height:0; overflow:hidden; transition:max-height .25s ease;
+    background:var(--paper-dim); border-bottom:1px solid var(--line);
+  }
+  .search-bar.open{ max-height:70px; }
+  .search-bar input{
+    width:100%; border:none; background:transparent; padding:16px 20px;
+    font-size:14px; color:var(--ink); outline:none;
+  }
+
+  /* mobile nav drawer */
+  .nav-overlay{ position:fixed; inset:0; background:rgba(22,21,15,0.4); opacity:0; pointer-events:none; transition:opacity .2s; z-index:55; }
+  .nav-overlay.open{ opacity:1; pointer-events:all; }
+  .nav-drawer{
+    position:fixed; top:0; left:0; height:100%; width:min(280px, 80vw);
+    background:var(--paper); z-index:56; border-right:1px solid var(--line);
+    transform:translateX(-100%); transition:transform .3s ease;
+    display:flex; flex-direction:column; padding:22px 0;
+  }
+  .nav-drawer.open{ transform:translateX(0); }
+  .nav-drawer-head{ display:flex; justify-content:space-between; align-items:center; padding:0 22px 22px; border-bottom:1px solid var(--line); margin-bottom:10px; }
+  .nav-drawer a{
+    display:block; padding:14px 22px; font-size:15px; letter-spacing:.02em;
+    border-bottom:1px solid var(--line);
+  }
+  .nav-drawer a:active{ background:var(--paper-dim); }
+
+  /* ---------- HERO ---------- */
+  .hero{ position:relative; max-width:900px; margin:0 auto; border-bottom:1px solid var(--line); }
+  .hero-slider{ position:relative; width:100%; aspect-ratio:4/5; overflow:hidden; background:var(--paper-dim); }
+  .hero-slide{ position:absolute; inset:0; opacity:0; transition:opacity .6s ease; }
+  .hero-slide.active{ opacity:1; }
+  .hero-slide img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .hero-slide .placeholder-text{ display:flex; align-items:center; justify-content:center; height:100%; font-size:12px; opacity:.5; text-align:center; padding:20px; line-height:1.6; }
+  .hero-dots{ position:absolute; bottom:16px; left:0; right:0; display:flex; justify-content:center; gap:6px; }
+  .hero-dot{ width:6px; height:6px; border-radius:50%; background:rgba(237,231,216,0.5); }
+  .hero-dot.active{ background:var(--paper); }
+  .hero-caption{ text-align:center; padding:26px 20px 30px; }
+  .hero-caption .urdu{ font-size:clamp(38px, 8vw, 56px); line-height:1; margin-bottom:10px; }
+  .hero-caption .tagline{ font-size:clamp(19px,4vw,24px); font-weight:700; margin-bottom:10px; }
+  .hero-caption .sub{ font-size:14px; opacity:.7; max-width:380px; margin:0 auto 18px; line-height:1.6; }
+  .hero-cta{ display:inline-block; background:var(--indigo); color:var(--paper); padding:12px 26px; font-size:13px; letter-spacing:.08em; text-transform:uppercase; border-radius:2px; }
+
+  /* ---------- TRUST STRIP ---------- */
+  .trust-strip{ max-width:900px; margin:0 auto; display:grid; grid-template-columns:repeat(4, 1fr); border-bottom:1px solid var(--line); }
+  .trust-item{ padding:20px 8px; text-align:center; border-left:1px solid var(--line); }
+  .trust-item:first-child{ border-left:none; }
+  .trust-item .t-title{ font-size:11.5px; font-weight:700; margin-bottom:3px; }
+  .trust-item .t-sub{ font-size:9.5px; opacity:.55; line-height:1.3; }
+
+  /* ---------- PRODUCTS ---------- */
+  .shop{ max-width:900px; margin:0 auto; padding:60px 20px 20px; }
+  .shop h2, .story h2{ font-size:12px; letter-spacing:.2em; text-transform:uppercase; opacity:.55; margin-bottom:26px; font-weight:500; text-align:center; }
+  .grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(220px, 1fr)); gap:2px; background:var(--line); border:1px solid var(--line); }
+  .card{ background:var(--paper); padding:24px 20px 20px; display:flex; flex-direction:column; position:relative; }
+  .card-badge{ position:absolute; top:14px; left:14px; font-size:9.5px; letter-spacing:.08em; text-transform:uppercase; background:var(--rust); color:var(--paper); padding:3px 8px; border-radius:12px; }
+  .tee-art{ width:100%; aspect-ratio:1/1; display:flex; align-items:center; justify-content:center; margin-bottom:16px; }
+  .tee-svg path.body{ fill:none; stroke:var(--ink); stroke-width:1.6; }
+  .tee-word{ font-family:'Noto Nastaliq Urdu', serif; font-size:34px; fill:var(--ink); }
+  .card-tag{ border:1px dashed var(--rust); padding:12px 12px 10px; display:flex; flex-direction:column; gap:4px; }
+  .card-word{ font-family:'Noto Nastaliq Urdu', serif; font-size:20px; }
+  .card-meaning{ font-size:12px; opacity:.6; letter-spacing:.02em; }
+  .card-bottom{ display:flex; align-items:center; justify-content:space-between; margin-top:14px; }
+  .price-block{ display:flex; align-items:baseline; gap:7px; }
+  .price-original{ font-family:'JetBrains Mono', monospace; font-size:11.5px; opacity:.45; text-decoration:line-through; }
+  .price-sale{ font-family:'JetBrains Mono', monospace; font-size:14.5px; color:var(--rust); font-weight:600; }
+  .add-btn{ font-size:11px; letter-spacing:.08em; text-transform:uppercase; border:1px solid var(--ink); padding:7px 12px; border-radius:2px; transition:background .15s, color .15s; }
+  .add-btn:hover{ background:var(--ink); color:var(--paper); }
+  .add-btn.added{ background:var(--indigo); border-color:var(--indigo); color:var(--paper); }
+  .size-row{ display:flex; gap:6px; margin-top:12px; }
+  .size-btn{ font-family:'JetBrains Mono', monospace; font-size:11px; width:28px; height:28px; border:1px solid var(--line); display:flex; align-items:center; justify-content:center; border-radius:2px; }
+  .size-btn.selected{ border-color:var(--ink); background:var(--ink); color:var(--paper); }
+  .no-results{ text-align:center; padding:40px 20px; opacity:.5; font-size:13px; grid-column:1/-1; background:var(--paper); }
+
+  /* ---------- WHY DASHT ---------- */
+  .why{ max-width:820px; margin:0 auto; padding:70px 20px; }
+  .why-grid{ display:grid; grid-template-columns:1fr; gap:2px; background:var(--line); border:1px solid var(--line); margin-top:10px; }
+  @media (min-width:640px){ .why-grid{ grid-template-columns:repeat(3,1fr); } }
+  .why-item{ background:var(--paper); padding:26px 22px; text-align:center; }
+  .why-item svg{ margin-bottom:12px; }
+  .why-item h3{ font-size:14px; margin-bottom:8px; }
+  .why-item p{ font-size:12.5px; opacity:.65; line-height:1.6; }
+
+  /* ---------- STORY ---------- */
+  .story{ max-width:760px; margin:0 auto; padding:20px 20px 80px; text-align:center; }
+  .story .urdu{ font-size:40px; margin-bottom:20px; }
+  .story p{ font-size:15px; line-height:1.75; opacity:.8; }
+  .story p + p{ margin-top:14px; }
+
+  /* ---------- CART DRAWER ---------- */
+  .overlay{ position:fixed; inset:0; background:rgba(22,21,15,0.4); opacity:0; pointer-events:none; transition:opacity .25s; z-index:50; }
+  .overlay.open{ opacity:1; pointer-events:all; }
+  .drawer{
+    position:fixed; top:0; right:0; height:100%; width:min(420px, 92vw);
+    background:var(--paper); z-index:60; transform:translateX(100%); transition:transform .3s ease;
+    display:flex; flex-direction:column; border-left:1px solid var(--line);
+  }
+  .drawer.open{ transform:translateX(0); }
+  .drawer-view{ display:none; flex-direction:column; height:100%; }
+  .drawer-view.active{ display:flex; }
+  .drawer-head{ padding:22px 24px; border-bottom:1px solid var(--line); display:flex; align-items:center; justify-content:space-between; }
+  .drawer-head h3{ font-size:13px; letter-spacing:.18em; text-transform:uppercase; }
+  .close-btn{ font-size:20px; line-height:1; }
+  .drawer-body{ flex:1; overflow-y:auto; padding:8px 24px; }
+  .drawer-item{ display:flex; justify-content:space-between; align-items:flex-start; padding:16px 0; border-bottom:1px solid var(--line); gap:10px; }
+  .di-word{ font-family:'Noto Nastaliq Urdu', serif; font-size:20px; }
+  .di-meta{ font-size:11px; opacity:.55; margin-top:3px; }
+  .di-qty{ display:flex; align-items:center; gap:8px; margin-top:8px; }
+  .qty-btn{ width:20px; height:20px; border:1px solid var(--line); font-size:12px; border-radius:2px; }
+  .di-remove{ font-size:11px; opacity:.5; text-decoration:underline; margin-top:8px; display:inline-block; }
+  .di-price{ font-family:'JetBrains Mono', monospace; font-size:13px; white-space:nowrap; }
+  .empty-cart{ padding:40px 0; text-align:center; opacity:.5; font-size:13px; }
+  .drawer-foot{ padding:18px 24px 22px; border-top:1px solid var(--line); }
+  .sum-row{ display:flex; justify-content:space-between; font-size:13px; margin-bottom:8px; opacity:.75; }
+  .sum-row.total-row{ font-size:14px; opacity:1; margin-top:10px; padding-top:10px; border-top:1px solid var(--line); margin-bottom:16px; }
+  .sum-row .mono{ font-size:14px; }
+  .total-row .mono{ font-size:16px; }
+  .free-ship-note{ font-size:11px; color:var(--indigo); margin-bottom:10px; }
+  .primary-btn{ display:block; width:100%; text-align:center; background:var(--indigo); color:var(--paper); padding:14px; font-size:13px; letter-spacing:.1em; text-transform:uppercase; border-radius:2px; transition:opacity .15s; }
+  .primary-btn:hover{ opacity:.85; }
+  .primary-btn.disabled{ opacity:.35; pointer-events:none; }
+  .foot-note{ font-size:10.5px; opacity:.5; margin-top:10px; line-height:1.5; }
+  .field{ margin-bottom:14px; }
+  .field label{ display:block; font-size:11px; letter-spacing:.08em; text-transform:uppercase; opacity:.6; margin-bottom:6px; }
+  .field input, .field textarea{ width:100%; border:1px solid var(--line); background:var(--paper); padding:10px 12px; font-size:14px; border-radius:2px; color:var(--ink); }
+  .field input:focus, .field textarea:focus{ outline:2px solid var(--indigo); outline-offset:1px; }
+  .field textarea{ resize:vertical; min-height:60px; }
+  .back-link{ font-size:11px; letter-spacing:.05em; text-transform:uppercase; opacity:.6; margin-bottom:16px; display:inline-block; }
+  .order-summary-mini{ font-size:11px; opacity:.6; margin-bottom:18px; line-height:1.7; border-bottom:1px solid var(--line); padding-bottom:14px; }
+  .success-state{ padding:60px 10px; text-align:center; }
+  .success-state .urdu{ font-size:40px; margin-bottom:16px; }
+  .success-state h4{ font-size:16px; margin-bottom:10px; }
+  .success-state p{ font-size:13px; opacity:.65; line-height:1.6; margin-bottom:24px; }
+
+  /* ---------- POLICY MODAL ---------- */
+  .policy-modal{ position:fixed; inset:0; z-index:70; display:none; align-items:center; justify-content:center; padding:20px; background:rgba(22,21,15,0.5); }
+  .policy-modal.open{ display:flex; }
+  .policy-box{ background:var(--paper); max-width:520px; width:100%; max-height:80vh; overflow-y:auto; padding:32px 28px; border:1px solid var(--line); position:relative; }
+  .policy-box h3{ font-size:16px; margin-bottom:16px; }
+  .policy-box p{ font-size:13.5px; line-height:1.75; opacity:.8; margin-bottom:12px; }
+  .policy-close{ position:absolute; top:18px; right:20px; font-size:20px; }
+
+  /* ---------- FOOTER ---------- */
+  footer{ max-width:900px; margin:0 auto; padding:50px 20px 60px; border-top:1px solid var(--line); }
+  .footer-top{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:30px; margin-bottom:36px; }
+  .footer-col h4{ font-size:11px; letter-spacing:.12em; text-transform:uppercase; opacity:.5; margin-bottom:12px; }
+  .footer-col a, .footer-col span{ display:block; font-size:13px; opacity:.75; margin-bottom:8px; }
+  .footer-col a:hover{ opacity:1; text-decoration:underline; }
+  .vip{ border-top:1px solid var(--line); padding-top:26px; margin-bottom:26px; }
+  .vip h4{ font-size:12px; letter-spacing:.15em; text-transform:uppercase; margin-bottom:12px; }
+  .vip-form{ display:flex; max-width:380px; border:1px solid var(--ink); }
+  .vip-form input{ flex:1; border:none; background:transparent; padding:11px 14px; font-size:13px; outline:none; }
+  .vip-form button{ padding:11px 18px; background:var(--ink); color:var(--paper); font-size:12px; letter-spacing:.05em; text-transform:uppercase; }
+  .vip-msg{ font-size:11.5px; margin-top:8px; opacity:.7; }
+  .footer-bottom{ font-size:11px; opacity:.5; letter-spacing:.03em; }
+
+  @media (max-width:560px){
+    header{ padding:12px 16px; }
+    .shop, .why, .story{ padding-left:16px; padding-right:16px; }
+  }
+</style>
+</head>
+<body id="top">
+
+<div class="announce">Free delivery on orders <span class="mono">PKR 10,000</span> and above</div>
+
+<header>
+  <div class="head-left">
+    <button class="icon-btn" onclick="toggleNav(true)" aria-label="Menu">
+      <svg class="icon" viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+    <button class="icon-btn" onclick="toggleSearch()" aria-label="Search">
+      <svg class="icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    </button>
+  </div>
+  <div class="brand">
+    <img src="assets/logo.png" alt="Dasht" onerror="this.style.display='none'; document.getElementById('brandFallback').style.display='flex';">
+    <div class="brand-fallback" id="brandFallback" style="display:none;">
+      <span class="urdu">دشت</span><span class="latin">Dasht</span>
+    </div>
+  </div>
+  <div class="head-right">
+    <button class="icon-btn" onclick="openCart()" aria-label="Cart">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+      <span class="cart-count" id="cartCount">0</span>
+    </button>
+  </div>
+</header>
+
+<div class="search-bar" id="searchBar">
+  <input type="text" id="searchInput" placeholder="Search words, meanings..." oninput="applySearch()">
+</div>
+
+<div class="nav-overlay" id="navOverlay" onclick="toggleNav(false)"></div>
+<nav class="nav-drawer" id="navDrawer">
+  <div class="nav-drawer-head">
+    <span class="urdu" style="font-size:22px;">دشت</span>
+    <button class="close-btn" onclick="toggleNav(false)">&times;</button>
+  </div>
+  <a href="#top" onclick="toggleNav(false)">Home</a>
+  <a href="#shop" onclick="toggleNav(false)">Tees</a>
+  <a href="#why" onclick="toggleNav(false)">About</a>
+  <a href="#footer-contact" onclick="toggleNav(false)">Contact</a>
+  <a href="#footer-policies" onclick="toggleNav(false)">Policies</a>
+</nav>
+
+<section class="hero">
+  <div class="hero-slider" id="heroSlider">
+    <div class="hero-slide active" data-slide="0">
+      <img src="assets/hero.png" alt="Dasht" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <div class="placeholder-text" style="display:none;">Hero image — save as <span class="mono">assets/hero.png</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="trust-strip">
+  <div class="trust-item"><div class="t-title">Cash on Delivery</div><div class="t-sub">Pay when it arrives</div></div>
+  <div class="trust-item"><div class="t-title">7-Day Return</div><div class="t-sub">Easy exchanges</div></div>
+  <div class="trust-item"><div class="t-title">Premium Cotton</div><div class="t-sub">Heavyweight, pre-shrunk</div></div>
+  <div class="trust-item"><div class="t-title">Limited Stock</div><div class="t-sub">Small runs only</div></div>
+</div>
+
+<section class="shop" id="shop">
+  <h2>Featured Products</h2>
+  <div class="grid" id="grid"></div>
+</section>
+
+<section class="why" id="why">
+  <h2>Why Dasht?</h2>
+  <div class="urdu" style="text-align:center; font-size:40px; margin-bottom:20px;">دشت</div>
+  <p style="font-size:15px; line-height:1.75; opacity:.8; text-align:center; max-width:640px; margin:0 auto;">There's no shortage of Urdu brands right now — but most of them turn the volume all the way up. Heavy calligraphy across the whole chest, three lines of poetry, loud colour. Meanwhile the t-shirt you actually reach for every day is almost always in English.</p>
+  <p style="font-size:15px; line-height:1.75; opacity:.8; text-align:center; max-width:640px; margin:14px auto 0;">We started Dasht because we wanted both at once: Urdu that fits into everyday life, printed clean and simple on heavyweight cotton — for everyone who loves the language but wants their t-shirt to stay out of the way.</p>
+</section>
+
+<footer>
+  <div class="footer-top">
+    <div class="footer-col" id="footer-contact">
+      <h4>Contact</h4>
+      <span>+92 327 9966554</span>
+      <span>weardasht@gmail.com</span>
+    </div>
+    <div class="footer-col" id="footer-policies">
+      <h4>Policies</h4>
+      <a onclick="openPolicy('shipping')">Shipping Policy</a>
+      <a onclick="openPolicy('returns')">Return Policy</a>
+      <a onclick="openPolicy('privacy')">Privacy Policy</a>
+    </div>
+    <div class="footer-col">
+      <h4>Shop</h4>
+      <a href="#shop">All Tees</a>
+      <a href="#why">About</a>
+    </div>
+  </div>
+  <div class="vip">
+    <h4>Join the VIP List</h4>
+    <form class="vip-form" onsubmit="return joinVIP(event)">
+      <input type="email" id="vipEmail" placeholder="Enter email here" required>
+      <button type="submit">Join</button>
+    </form>
+    <div class="vip-msg" id="vipMsg"></div>
+  </div>
+  <div class="footer-bottom">© Dasht — designed &amp; printed to order</div>
+</footer>
+
+<!-- CART / CHECKOUT DRAWER -->
+<div class="overlay" id="overlay" onclick="closeCart()"></div>
+<div class="drawer" id="drawer">
+  <div id="cartView" class="drawer-view active">
+    <div class="drawer-head"><h3>Your Cart</h3><button class="close-btn" onclick="closeCart()">&times;</button></div>
+    <div class="drawer-body" id="drawerItems"></div>
+    <div class="drawer-foot">
+      <div class="sum-row total-row"><span>Total</span><span class="mono" id="cartTotal">Rs 0</span></div>
+      <button class="primary-btn" id="toCheckoutBtn" onclick="goToCheckout()">Checkout — Cash on Delivery</button>
+      <p class="foot-note">Shipping is calculated at checkout.</p>
+    </div>
+  </div>
+
+  <div id="checkoutView" class="drawer-view">
+    <div class="drawer-head"><h3>Delivery Details</h3><button class="close-btn" onclick="closeCart()">&times;</button></div>
+    <div class="drawer-body">
+      <a class="back-link" onclick="backToCart()">&larr; Back to cart</a>
+      <div class="order-summary-mini" id="orderSummaryMini"></div>
+      <form id="checkoutForm">
+        <div class="field"><label for="fName">Full name</label><input type="text" id="fName" required></div>
+        <div class="field"><label for="fPhone">Phone number</label><input type="tel" id="fPhone" required placeholder="03XX-XXXXXXX"></div>
+        <div class="field"><label for="fAddress">Delivery address</label><textarea id="fAddress" required></textarea></div>
+        <div class="field"><label for="fCity">City</label><input type="text" id="fCity" required></div>
+        <div class="field"><label for="fNotes">Notes (optional)</label><textarea id="fNotes" placeholder="Landmark, delivery time preference, etc."></textarea></div>
+      </form>
+    </div>
+    <div class="drawer-foot">
+      <div class="sum-row"><span>Subtotal</span><span class="mono" id="checkoutSubtotal">Rs 0</span></div>
+      <div class="sum-row"><span>Shipping</span><span class="mono" id="checkoutShipping">Rs 0</span></div>
+      <div class="free-ship-note" id="freeShipNote" style="display:none;">You've unlocked free delivery 🎉</div>
+      <div class="sum-row total-row"><span>Total (Cash on Delivery)</span><span class="mono" id="checkoutTotal">Rs 0</span></div>
+      <button class="primary-btn" id="placeOrderBtn" onclick="placeOrder()">Place Order</button>
+      <p class="foot-note">By placing this order you agree to pay cash on delivery. We'll call to confirm before dispatch.</p>
+    </div>
+  </div>
+
+  <div id="successView" class="drawer-view">
+    <div class="drawer-head"><h3>Order Placed</h3><button class="close-btn" onclick="closeCart()">&times;</button></div>
+    <div class="drawer-body">
+      <div class="success-state">
+        <div class="urdu">شکریہ</div>
+        <h4>Thank you — your order is in.</h4>
+        <p>We've received your details and will call to confirm before we dispatch. Pay in cash when it arrives.</p>
+        <button class="primary-btn" style="display:inline-block; width:auto; padding:12px 24px;" onclick="closeCart()">Continue shopping</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- POLICY MODALS -->
+<div class="policy-modal" id="shippingModal">
+  <div class="policy-box">
+    <button class="policy-close" onclick="closePolicy('shipping')">&times;</button>
+    <h3>Shipping Policy</h3>
+    <p>All orders are processed within 1–2 business days. Standard delivery across Pakistan takes 3–5 business days depending on your city.</p>
+    <p>A flat shipping charge of Rs. 250 applies to orders under Rs. 10,000. Orders of Rs. 10,000 or more ship free.</p>
+    <p>Cash on delivery is available nationwide — pay in cash when your order arrives. Once your order ships, we'll call to confirm delivery details.</p>
+  </div>
+</div>
+<div class="policy-modal" id="returnsModal">
+  <div class="policy-box">
+    <button class="policy-close" onclick="closePolicy('returns')">&times;</button>
+    <h3>Return &amp; Exchange Policy</h3>
+    <p>We want you to love your Dasht tee. If something's wrong — wrong size, damaged in transit, or not what you expected — let us know within 7 days of delivery and we'll arrange an exchange or refund.</p>
+    <p>Items must be unworn, unwashed, and in original condition with tags attached.</p>
+    <p>To start a return, contact us with your order number and reason for return.</p>
+  </div>
+</div>
+<div class="policy-modal" id="privacyModal">
+  <div class="policy-box">
+    <button class="policy-close" onclick="closePolicy('privacy')">&times;</button>
+    <h3>Privacy Policy</h3>
+    <p>We collect only what's needed to process your order: your name, phone number, delivery address, and city. This information is used solely to fulfil and confirm your order.</p>
+    <p>If you join our VIP list, we'll store your email to send occasional updates about new drops. You can ask us to remove it at any time.</p>
+    <p>We do not sell or share your information with third parties beyond what's needed to deliver your order.</p>
+  </div>
+</div>
+
+<script>
+/* ====== EDIT THIS: paste your Google Apps Script Web App URL here ====== */
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzZtGuMlhCMQvYadIp0EsUghtEKp4B9VzwYIEvIxjd1tz1oAR-SiA8ErpM8nxhp3zYojg/exec";
+const SHIPPING_FEE = 250;
+const FREE_SHIPPING_THRESHOLD = 10000;
+
+const PRODUCTS = [
+  { id:'sukoon', word:'سکون', meaning:'Peace',    originalPrice:2999, salePrice:1699, color:'Paper White' },
+  { id:'khwab',  word:'خواب', meaning:'Dream',    originalPrice:2999, salePrice:1699, color:'Deep Indigo' },
+  { id:'sabr',   word:'صبر',  meaning:'Patience', originalPrice:2999, salePrice:1699, color:'Olive' },
+];
+const SIZES = ['S','M','L','XL'];
+
+let cart = JSON.parse(localStorage.getItem('dasht_cart') || '[]');
+let selectedSize = {};
+let searchTerm = '';
+
+function teeSVG(p){
+  return `<svg class="tee-svg" viewBox="0 0 160 160" width="80%" height="80%">
+    <path class="body" d="M50 30 L30 45 L20 65 L35 72 L40 60 L40 140 L120 140 L120 60 L125 72 L140 65 L130 45 L110 30 L95 40 L65 40 Z" />
+    <text x="80" y="98" text-anchor="middle" class="tee-word">${p.word}</text>
+  </svg>`;
+}
+
+function renderGrid(){
+  const grid = document.getElementById('grid');
+  const visible = PRODUCTS.filter(p =>
+    !searchTerm || p.meaning.toLowerCase().includes(searchTerm) || p.word.includes(searchTerm)
+  );
+  if(visible.length === 0){
+    grid.innerHTML = `<div class="no-results">No tees match "${searchTerm}"</div>`;
+    return;
+  }
+  grid.innerHTML = visible.map(p => {
+    selectedSize[p.id] = selectedSize[p.id] || null;
+    return `
+    <div class="card">
+      <span class="card-badge">Sale</span>
+      <div class="tee-art">${teeSVG(p)}</div>
+      <div class="card-tag">
+        <span class="card-word">${p.word}</span>
+        <span class="card-meaning">${p.meaning} · ${p.color}</span>
+      </div>
+      <div class="size-row" id="sizes-${p.id}">
+        ${SIZES.map(s => `<button class="size-btn" onclick="pickSize('${p.id}','${s}')" id="size-${p.id}-${s}">${s}</button>`).join('')}
+      </div>
+      <div class="card-bottom">
+        <div class="price-block">
+          <span class="price-original mono">Rs ${p.originalPrice.toLocaleString()}</span>
+          <span class="price-sale mono">Rs ${p.salePrice.toLocaleString()}</span>
+        </div>
+        <button class="add-btn" id="add-${p.id}" onclick="addToCart('${p.id}')">Add</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function applySearch(){
+  searchTerm = document.getElementById('searchInput').value.trim().toLowerCase();
+  renderGrid();
+}
+function toggleSearch(){
+  const bar = document.getElementById('searchBar');
+  bar.classList.toggle('open');
+  if(bar.classList.contains('open')) document.getElementById('searchInput').focus();
+}
+
+function toggleNav(open){
+  document.getElementById('navDrawer').classList.toggle('open', open);
+  document.getElementById('navOverlay').classList.toggle('open', open);
+}
+
+function pickSize(pid, size){
+  selectedSize[pid] = size;
+  SIZES.forEach(s => document.getElementById(`size-${pid}-${s}`).classList.toggle('selected', s === size));
+}
+
+function addToCart(pid){
+  const size = selectedSize[pid];
+  if(!size){
+    const row = document.getElementById(`sizes-${pid}`);
+    row.style.outline = '1px solid #9C4A2E';
+    setTimeout(()=> row.style.outline = 'none', 900);
+    return;
+  }
+  const product = PRODUCTS.find(p => p.id === pid);
+  const existing = cart.find(i => i.id === pid && i.size === size);
+  if(existing){ existing.qty += 1; }
+  else{ cart.push({ id:pid, word:product.word, meaning:product.meaning, price:product.salePrice, size, qty:1 }); }
+  saveCart();
+  const btn = document.getElementById(`add-${pid}`);
+  btn.textContent = 'Added ✓'; btn.classList.add('added');
+  setTimeout(()=>{ btn.textContent = 'Add'; btn.classList.remove('added'); }, 1200);
+}
+
+function changeQty(idx, delta){
+  cart[idx].qty += delta;
+  if(cart[idx].qty <= 0) cart.splice(idx, 1);
+  saveCart();
+}
+function removeItem(idx){ cart.splice(idx, 1); saveCart(); }
+
+function saveCart(){
+  localStorage.setItem('dasht_cart', JSON.stringify(cart));
+  renderCart();
+}
+
+function subtotal(){ return cart.reduce((a,i) => a + i.qty * i.price, 0); }
+function shippingCost(){ return (cart.length === 0 || subtotal() >= FREE_SHIPPING_THRESHOLD) ? 0 : SHIPPING_FEE; }
+function grandTotal(){ return subtotal() + shippingCost(); }
+
+function renderCart(){
+  const itemsEl = document.getElementById('drawerItems');
+  const countEl = document.getElementById('cartCount');
+  const toCheckoutBtn = document.getElementById('toCheckoutBtn');
+
+  countEl.textContent = cart.reduce((a,i) => a + i.qty, 0);
+  document.getElementById('cartTotal').textContent = `Rs ${subtotal().toLocaleString()}`;
+
+  if(cart.length === 0){
+    itemsEl.innerHTML = `<div class="empty-cart">Your cart is empty.<br>Add a word that means something to you.</div>`;
+    toCheckoutBtn.classList.add('disabled');
+  } else {
+    toCheckoutBtn.classList.remove('disabled');
+    itemsEl.innerHTML = cart.map((item, idx) => `
+      <div class="drawer-item">
+        <div>
+          <div class="di-word">${item.word}</div>
+          <div class="di-meta">${item.meaning} · Size ${item.size}</div>
+          <div class="di-qty">
+            <button class="qty-btn" onclick="changeQty(${idx},-1)">−</button>
+            <span class="mono">${item.qty}</span>
+            <button class="qty-btn" onclick="changeQty(${idx},1)">+</button>
+          </div>
+          <span class="di-remove" onclick="removeItem(${idx})">Remove</span>
+        </div>
+        <span class="di-price mono">Rs ${(item.price * item.qty).toLocaleString()}</span>
+      </div>
+    `).join('');
+  }
+}
+
+function openCart(){
+  document.getElementById('overlay').classList.add('open');
+  document.getElementById('drawer').classList.add('open');
+  backToCart();
+}
+function closeCart(){
+  document.getElementById('overlay').classList.remove('open');
+  document.getElementById('drawer').classList.remove('open');
+}
+
+function goToCheckout(){
+  if(cart.length === 0) return;
+  document.getElementById('cartView').classList.remove('active');
+  document.getElementById('checkoutView').classList.add('active');
+  document.getElementById('successView').classList.remove('active');
+  document.getElementById('orderSummaryMini').innerHTML = cart.map(i =>
+    `${i.meaning} (${i.word}) · Size ${i.size} × ${i.qty} — Rs ${(i.price*i.qty).toLocaleString()}`
+  ).join('<br>');
+  const ship = shippingCost();
+  document.getElementById('checkoutSubtotal').textContent = `Rs ${subtotal().toLocaleString()}`;
+  document.getElementById('checkoutShipping').textContent = ship === 0 ? 'Free' : `Rs ${ship.toLocaleString()}`;
+  document.getElementById('checkoutTotal').textContent = `Rs ${grandTotal().toLocaleString()}`;
+  document.getElementById('freeShipNote').style.display = ship === 0 ? 'block' : 'none';
+}
+
+function backToCart(){
+  document.getElementById('cartView').classList.add('active');
+  document.getElementById('checkoutView').classList.remove('active');
+  document.getElementById('successView').classList.remove('active');
+}
+
+async function placeOrder(){
+  const name = document.getElementById('fName').value.trim();
+  const phone = document.getElementById('fPhone').value.trim();
+  const address = document.getElementById('fAddress').value.trim();
+  const city = document.getElementById('fCity').value.trim();
+  const notes = document.getElementById('fNotes').value.trim();
+
+  if(!name || !phone || !address || !city){
+    document.getElementById('checkoutForm').reportValidity();
+    return;
+  }
+
+  const itemsText = cart.map(i => `${i.meaning} (${i.word}) x${i.qty} [${i.size}]`).join(', ');
+  const ship = shippingCost();
+  const payload = {
+    type: 'order', name, phone, address, city, notes,
+    items: itemsText,
+    total: `Rs ${grandTotal().toLocaleString()} (shipping: ${ship === 0 ? 'Free' : 'Rs ' + ship})`
+  };
+
+  const btn = document.getElementById('placeOrderBtn');
+  btn.textContent = 'Placing order...';
+  btn.classList.add('disabled');
+
+  try{
+    await fetch(GOOGLE_SCRIPT_URL, {
+      method: 'POST', mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify(payload)
+    });
+  } catch(err){ console.error('Order send failed', err); }
+
+  cart = [];
+  saveCart();
+  document.getElementById('cartView').classList.remove('active');
+  document.getElementById('checkoutView').classList.remove('active');
+  document.getElementById('successView').classList.add('active');
+  btn.textContent = 'Place Order';
+  btn.classList.remove('disabled');
+}
+
+async function joinVIP(e){
+  e.preventDefault();
+  const email = document.getElementById('vipEmail').value.trim();
+  const msg = document.getElementById('vipMsg');
+  if(!email) return false;
+  msg.textContent = 'Joining...';
+  try{
+    await fetch(GOOGLE_SCRIPT_URL, {
+      method: 'POST', mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({ type: 'newsletter', email })
+    });
+  } catch(err){ console.error('VIP signup failed', err); }
+  msg.textContent = "You're on the list.";
+  document.getElementById('vipEmail').value = '';
+  return false;
+}
+
+function openPolicy(name){ document.getElementById(name + 'Modal').classList.add('open'); }
+function closePolicy(name){ document.getElementById(name + 'Modal').classList.remove('open'); }
+
+renderGrid();
+renderCart();
+</script>
+</body>
+</html>
